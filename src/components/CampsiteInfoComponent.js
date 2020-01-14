@@ -8,7 +8,7 @@ function RenderCampsite({campsite}) {
     return (
         <div className="col-md-5 m-1">
             <Card>
-                <CardImg top src={campsite.image} alt={campsite.name} />
+                <CardImg top ={campsite.image} alt={campsite.name} />
                 <CardBody>
                     <CardText>{campsite.description}</CardText>
                 </CardBody>
@@ -56,7 +56,7 @@ function CampsiteInfo(props) {
                     </div>
                 </div>
                 <div className="row">
-                    <RenderCampsite campsite={props.campsite} />
+                    <function ReCampsite campsite={props.campsite} />
                     <RenderComments comments={props.comments} />
                 </div>
             </div>
