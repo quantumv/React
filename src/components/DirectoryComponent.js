@@ -8,7 +8,7 @@ function RenderDirectoryItem({campsite}) {
             <Link to={`/directory/${campsite.id}`}>
                 <CardImg width="100%" src={campsite.image} alt={campsite.name} />
                 <CardImgOverlay>
-                    <CardTitle>{campsite.name}</CardTitle>
+                    <CardTitle tag="h5">{campsite.name}</CardTitle>
                 </CardImgOverlay>
             </Link>
         </Card>
