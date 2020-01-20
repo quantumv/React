@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import { Card, CardImg, CardText, CardBody, Breadcrumb, BreadcrumbItem, Button, ModalHeader, ModalBody, Modal, Label} from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Control, LocalForm } from 'react-redux-form';
+import { Control, LocalForm, Errors } from 'react-redux-form';
+
+const maxLength = len => val => !val || val.length <= len
+const minLength = len  => val => val && val.length >= len
 
 class CommentForm extends Component {
-        
     constructor(props) {
         super(props);
 
@@ -13,18 +15,24 @@ class CommentForm extends Component {
         };
         
         this.toggleModal = this.toggleModal.bind(this);
-        }
-
+        this.handleSubmit=this.handleSubmit.bind(this);
+    }
+          
     toggleModal() {
         this.setState({
             isModalOpen: !this.state.isModalOpen
         });
     }
-          
-    render () {
+
+    handleSubmit(values) {
+        this.toggleModal();
+        this.props.addComment(this.props.campsiteId, values.rating, values.author, values.text);
+    }
+
+    render() {
         return(
             <React.Fragment>
-            <Button Outline> 
+            <Button outline onClick={this.toggleModal}> 
                 <i outline className="fa fa-pencil"></i>Submit Comment
             </Button>
                 <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
@@ -47,14 +55,24 @@ class CommentForm extends Component {
                                 </Control.select>
                             </div>
                             <div className="form-group">
-                                <Label htmlFor="author">Author</Label>
+                                <Label htmlFor="author">Your Name</Label>
                                 <Control.text
-                                    model="author"
+                                    model=".author"
                                     id="author"
                                     name="author"
+                                    placeholder="Your Name"
                                     className="form-control"
+                                    validators={{
+                                        minLength: minLength(2),
+                                        maxLength: maxLength(15)
+                                    }}
                                     >
                                 </Control.text>
+                                <Errors model=".author" className="text-danger" messages={{
+                                    minLength: 'Must be at least 2 characters!',
+                                    maxLength: 'Must be 15 characters or less!'
+                                }}>
+                                </Errors>
                             </div>
                             <div className="form-group">
                                 <Label htmlFor="text">Text</Label>
@@ -63,9 +81,13 @@ class CommentForm extends Component {
                                     id="text"
                                     name="text"
                                     className="form-control"
+                                    rows="6"
                                     >
                                 </Control.textarea>
                             </div>
+                            <Button type="submit" color="primary">
+                                Submit
+                            </Button>
                         </LocalForm>
                     </ModalBody>
                 </Modal>
@@ -78,7 +100,7 @@ function RenderCampsite({campsite}) {
     return (
         <div className="col-md-5 m-1">
             <Card>
-                <CardImg top ={campsite.image} alt={campsite.name} />
+                <CardImg top src={campsite.image} alt={campsite.name} />
                 <CardBody>
                     <CardText>{campsite.description}</CardText>
                 </CardBody>
@@ -87,8 +109,7 @@ function RenderCampsite({campsite}) {
     );
 }
 
-
-function RenderComments({comments}) {
+function RenderComments({comments, addComment, campsiteId}) {
     if (comments) {
         return (
             <div className="col-md-5 m1">
@@ -98,13 +119,10 @@ function RenderComments({comments}) {
                                     day: '2-digit'
                                 }).format(new Date(Date.parse(comment.date)))}
                         </div>)}
-                    );
-                })}
-                <CommentForm />
+                <CommentForm campsiteId={campsiteId} addComment={addComment} />
             </div>
         );
     }
-
 }
 
 function CampsiteInfo(props) {
@@ -123,7 +141,11 @@ function CampsiteInfo(props) {
                 </div>
                 <div className="row">
                     <RenderCampsite campsite={props.campsite} />
-                    <RenderComments comments={props.comments} />
+                    <RenderComments 
+                    comments={props.comments} 
+                    addComent={props.addComment} 
+                    campsiteId={props.campsite.id} 
+                    />
                 </div>
             </div>
         );
