@@ -27,7 +27,7 @@ class CommentForm extends Component {
 
     handleSubmit(values) {
         this.toggleModal();
-        this.props.addComment(this.props.campsiteId, values.rating, values.author, values.text);
+        this.props.addcomment(this.props.campsiteId, values.rating, values.author, values.text);
     }
 
     render() {
@@ -57,7 +57,7 @@ class CommentForm extends Component {
                             </div>
                             <div className="form-group">
                                 <Label htmlFor="author">Your Name</Label>
-                                <Control.text
+                                <Control.text  
                                     model=".author"
                                     id="author"
                                     name="author"
@@ -78,7 +78,7 @@ class CommentForm extends Component {
                             <div className="form-group">
                                 <Label htmlFor="text">Text</Label>
                                 <Control.textarea
-                                    model="text"
+                                    model=".text"
                                     id="text"
                                     name="text"
                                     className="form-control"
