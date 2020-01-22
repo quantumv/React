@@ -27,7 +27,7 @@ class CommentForm extends Component {
 
     handleSubmit(values) {
         this.toggleModal();
-        this.props.addcomment(this.props.campsiteId, values.rating, values.author, values.text);
+        this.props.addComment(this.props.campsiteId, values.rating, values.author, values.text);
     }
 
     render() {
@@ -43,7 +43,7 @@ class CommentForm extends Component {
                             <div className="form-group">
                                 <Label htmlFor="rating">Rating</Label>
                                 <Control.select
-                                    model="rating"
+                                    model=".rating"
                                     id="rating"
                                     name="rating"
                                     className="form-control"
@@ -169,7 +169,7 @@ function CampsiteInfo(props) {
                     <RenderCampsite campsite={props.campsite} />
                     <RenderComments 
                     comments={props.comments} 
-                    addComent={props.addComment} 
+                    addComment={props.addComment} 
                     campsiteId={props.campsite.id} 
                     />
                 </div>

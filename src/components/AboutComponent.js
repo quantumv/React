@@ -9,27 +9,24 @@ function RenderPartner({ partner }) {
            <React.Fragment>
                <Media object src={partner.image} alt={partner.name} width="150" />
                <Media body className="ml-5 mb-4">
-                   <Media heading>
-                       {partner.name}
-                   </Media>
+                   <Media heading>{partner.name}</Media>
                    {partner.description}
+                  
                </Media>
            </React.Fragment>
-       )
-   }
-   else {
-       return (
-           <div />
-       )
-   }
+        );
+       return <div />;
+    }
 }
 function About(props) {
 
     const partners = props.partners.map(partner => {
         return (
-            <Media tag="li" key={partner.id}></Media>
+            <Media tag="li" key={partner.id}>
+                <RenderPartner partner={partner} />
+            </Media>
         );
-    });;
+    });
 
     return (
         <div className="container">
@@ -86,6 +83,7 @@ function About(props) {
                 <div className="col mt-4">
                     <Media list>
                         {partners}
+                        
                     </Media>
                 </div>
             </div>

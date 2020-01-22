@@ -9,7 +9,7 @@ import { Promotions } from './promotions';
 import { InitialFeedback } from './form';
 
 export const ConfigureStore = () => {
-    const store = createStore(
+    const store = createStore( 
         combineReducers({
             campsites: Campsites,
             comments: Comments,
