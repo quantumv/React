@@ -63,7 +63,7 @@ export const commentsFailed = errMess => ({
     payload: errMess
 });
 
-export const addComment = comment => ({
+export const addComments = comment => ({
     type: ActionTypes.ADD_COMMENT,
     payload: comment
 });
@@ -96,7 +96,7 @@ export const postComment = (campsiteId, rating, author, text) => dispatch => {
                 error => { throw error; }
             )
             .then(response => response.json())
-            .then(response => dispatch(addComment(response)))
+            .then(response => dispatch(addComments(response)))
             .catch(error => {
                 console.log('post comment', error.message);
                 alert('Your comment could not be posted\nError: ' + error.message);
@@ -106,7 +106,7 @@ export const postComment = (campsiteId, rating, author, text) => dispatch => {
     export const fetchPromotions = () => (dispatch) => {
 
         dispatch(promotionsLoading());
-        return fetch(baseUrl + 'promotions')add
+        return fetch(baseUrl + 'promotions')
             .then(response => {
                 if (response.ok) {
                     return response;
