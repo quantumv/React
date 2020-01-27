@@ -1,6 +1,8 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
+
+//THIS IS A CAMPSITE FETCH //
 export const fetchCampsites = () => dispatch => {
     dispatch(campsitesLoading());
     return fetch(baseUrl + 'campsites')
@@ -21,9 +23,6 @@ export const fetchCampsites = () => dispatch => {
         .then(campsites => dispatch(addCampsites(campsites)))
         .catch(error => dispatch(campsitesFailed(error.message)));
 };
-
-
-
 export const campsitesLoading = () => ({
     type: ActionTypes.CAMPSITES_LOADING
 });
@@ -38,6 +37,8 @@ export const addCampsites = campsites => ({
     payload: campsites
 });
 
+
+// THIS IS A COMMMENT FETCH //
 export const fetchComments = () => dispatch => {
     return fetch(baseUrl + 'comments')
         .then(response => {
@@ -64,11 +65,10 @@ export const commentsFailed = errMess => ({
 });
 
 export const addComments = comment => ({
-    type: ActionTypes.ADD_COMMENT,
+    type: ActionTypes.ADD_COMMENTS,
     payload: comment
 });
 export const postComment = (campsiteId, rating, author, text) => dispatch => {
-    
     const newComment = {
         campsiteId: campsiteId,
         rating: rating,
@@ -100,10 +100,46 @@ export const postComment = (campsiteId, rating, author, text) => dispatch => {
             .catch(error => {
                 console.log('post comment', error.message);
                 alert('Your comment could not be posted\nError: ' + error.message);
-            });
+        });
     };
 
-    export const fetchPromotions = () => (dispatch) => {
+
+export const postFeedback = (campsiteId, rating, author, text) => dispatch => {
+    const feedback = {
+        campsiteId: campsiteId,
+        rating: rating,
+        author: author,
+        text: text
+    };
+    feedback.date = new Date().toISOString();
+    
+        return fetch(baseUrl + 'feedback.', {
+            method: "POST",
+            body: JSON.stringify(feedback),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                    error.response = response;
+                    throw error;
+                }
+            },
+                error => { throw error; }
+            )
+            .then(response => response.json())
+            .catch(error => {
+                console.log('post feedback', error.message);
+                alert('Thank you for your feedback\nError: ' + error.message);
+            });
+        };
+
+// THIS IS A PROMOTION FETCH // 
+export const fetchPromotions = () => (dispatch) => {
 
         dispatch(promotionsLoading());
         return fetch(baseUrl + 'promotions')
@@ -137,3 +173,40 @@ export const postComment = (campsiteId, rating, author, text) => dispatch => {
         type: ActionTypes.ADD_PROMOTIONS,
         payload: promotions
     });
+
+
+//THIS IS A PARTNERS FETCH // this is new //
+export const fetchPartners = () => (dispatch) => {
+
+    dispatch(partnersLoading());
+    return fetch(baseUrl + 'partners')
+        .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                error.response = response;
+                throw error;
+            }
+        },
+            error => {
+                const errMess = new Error(error.message);
+                throw errMess;
+            }
+        )
+        .then(response => response.json())
+        .then(partners => dispatch(addPartners(partners)))
+        .catch(error => dispatch(partnersFailed(error.message)));
+};
+
+export const partnersLoading = () => ({
+    type: ActionTypes.PARTNERS_LOADING
+});
+export const partnersFailed = errMess => ({
+    type: ActionTypes.PARTNERS_FAILED,
+    payload: errMess
+});
+export const addPartners = partners => ({
+    type: ActionTypes.ADD_PARTNERS,
+    payload: partners
+});
